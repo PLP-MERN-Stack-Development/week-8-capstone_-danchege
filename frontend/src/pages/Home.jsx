@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import '../styles/Home.css';
 
 const Home = () => {
@@ -6,12 +7,12 @@ const Home = () => {
     <div className="home-container">
       <section className="hero-section">
         <div className="hero-content">
-          <div className="logo-placeholder">Logo/Image</div>
+          <img src="/images/logo/tushikane_logo.png" alt="Tushikane Logo" className="logo-image" />
           <h1 className="home-title">Welcome to Tushikane</h1>
           <p className="home-mission">
             Empowering the Bahati, Nakuru County community through collaboration, compassion, and action.
           </p>
-          <a href="/about" className="cta-button">Learn More</a>
+          <Link to="/about" className="cta-button">Learn More</Link>
         </div>
       </section>
       <section className="stats-section">
@@ -31,10 +32,10 @@ const Home = () => {
       <section className="quick-links-section">
         <h3>Quick Links</h3>
         <div className="quick-links">
-          <a href="/volunteers">Become a Volunteer</a>
-          <a href="/donors">Donate</a>
-          <a href="/projectpulse">Project Pulse</a>
-          <a href="/chathub">Join Chat Hub</a>
+          <Link to="/volunteers">Become a Volunteer</Link>
+          <Link to="/donors">Donate</Link>
+          <Link to="/projectpulse">Project Pulse</Link>
+          <Link to="/chathub">Join Chat Hub</Link>
         </div>
       </section>
       <section className="testimonials-section">

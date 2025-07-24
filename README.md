@@ -4,7 +4,201 @@
 
 A modern, full-stack web application that connects volunteers, donors, and community members to support humanitarian initiatives and community projects.
 
-## 📱 Features
+## 🚀 Live Demo
+
+- **Frontend (Vercel):** http://tushikane.vercel.app/
+- **Backend (Render):** https://tushikane-1.onrender.com/
+- **Pitch Deck:** [View Pitch Deck](https://gamma.app/docs/Tushikane-Humanitarian-Community-Service-Platform-ibcpl4gpqyjsdy6)
+- **Github Link** https://github.com/danchege/Tushikane.git
+
+## 📁 Project Structure
+
+```
+Tushikane/
+├── backend/
+│   ├── config/
+│   ├── controllers/
+│   ├── db/
+│   ├── middleware/
+│   ├── models/
+│   ├── routes/
+│   ├── utils/
+│   ├── Dockerfile
+│   ├── package.json
+│   ├── pnpm-lock.yaml
+│   ├── seed.js
+│   ├── server.js
+│   ├── test-mongo.js
+│   ├── testDatabase.js
+│   ├── testMongo.js
+│
+├── frontend/
+│   ├── public/
+│   │   └── images/
+│   │       └── logo/
+│   │           └── tushikane_logo.png
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── services/
+│   │   ├── styles/
+│   │   ├── App.jsx
+│   │   ├── App.js
+│   │   ├── App.css
+│   │   └── main.jsx
+│   ├── jest.config.js
+│   ├── babel.config.js
+│   ├── setupTests.js
+│   ├── vite.config.mjs
+│   ├── Dockerfile
+│   ├── index.html
+│   ├── package.json
+│   └── pnpm-lock.yaml
+│
+├── .github/
+│   └── workflows/
+│       ├── backend.yaml
+│       └── frontend.yaml
+├── screenshots/
+│   ├── about/
+│   ├── admin/
+│   ├── contact/
+│   ├── donors/
+│   ├── home/
+│   ├── projectpulse/
+│   └── volunteers/
+├── docker-compose.yml
+├── package.json
+├── package-lock.json
+├── pnpm-lock.yaml
+├── README.md
+└── vercel.json
+```
+
+## 🚀 Deployment
+
+This project is configured for continuous deployment using GitHub Actions.
+
+### Backend (Render)
+- The backend is automatically deployed to **Render** from the `backend/` directory.
+- The CI/CD pipeline in `.github/workflows/backend.yaml` handles testing, building a Docker image, and deploying.
+- A live instance is running on Render, connected to a MongoDB Atlas database.
+
+### Frontend (Vercel)
+- The frontend is automatically deployed to **Vercel** from the `frontend/` directory.
+- The CI/CD pipeline in `.github/workflows/frontend.yaml` handles testing, building, and deploying to Vercel.
+- The production build is optimized by Vite.
+
+## ⚙️ CI/CD Operations
+
+This project uses **GitHub Actions** for continuous integration and deployment:
+
+### Frontend (Vercel)
+- Workflow: `.github/workflows/frontend.yaml`
+- On every push or pull request to `main` (affecting `frontend/**`):
+  1. Installs dependencies and runs tests for the frontend.
+  2. Builds the frontend with Vite.
+  3. Deploys the production build to Vercel using the Vercel CLI and project secrets.
+- Secrets required: `VERCEL_TOKEN`, `VERCEL_PROJECT_ID`, `VERCEL_ORG_ID`
+- Vercel Root Directory: `frontend`
+
+### Backend (Render)
+- Workflow: `.github/workflows/backend.yaml`
+- On every push or pull request to `main` (affecting `backend/**`):
+  1. Installs dependencies and runs tests for the backend.
+  2. Builds and pushes a Docker image to GitHub Container Registry.
+  3. Deploys the backend to Render using the Render API and project secrets.
+- Secrets required: `RENDER_API_KEY`, `RENDER_SERVICE_ID`
+
+### General
+- All workflows run on Ubuntu runners.
+- All dependencies are managed with `pnpm` for fast, reliable installs.
+- Build/test failures or missing secrets will prevent deployment. 
+
+## 🖼️ Workflow Success Screenshots
+
+### Backend (Render)
+![Backend Render Workflow Success](./screenshots/backend/render-workflow-success.png)
+
+#### Render Backend Logs
+![Render Backend Logs](./screenshots/backend/render_logs.png)
+
+### Frontend (Vercel)
+![Frontend Vercel Workflow Success](./screenshots/frontend/vercel-workflow-success.png)
+
+#### Vercel Deployment Screenshot
+![Vercel Deployment Screenshot](./screenshots/frontend/vercel.png)
+
+## 🛠️ Technology Stack
+
+### Backend
+- **Runtime**: Node.js
+- **Framework**: Express.js
+- **Database**: MongoDB with Mongoose
+- **Authentication**: JWT with `bcryptjs`
+- **Real-time**: Socket.IO
+- **Security**: Helmet, CORS, Rate Limiting
+- **Validation**: express-validator
+
+### Frontend
+- **Framework**: React.js with Vite
+- **State Management**: React Context / Hooks (can be extended with Redux)
+- **UI & Animations**: Framer Motion, CSS
+- **HTTP Client**: Axios
+- **Routing**: React Router
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Node.js (v18 or higher)
+- pnpm (recommended for monorepo support)
+- MongoDB (local instance or from a provider like MongoDB Atlas)
+
+### Installation & Setup
+
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/danchege/Tushikane.git
+    cd Tushikane
+    ```
+
+2.  **Install all dependencies:**
+    Run this command from the root directory to install dependencies for both the frontend and backend.
+    ```bash
+    pnpm install
+    ```
+
+3.  **Configure Backend Environment:**
+    - Navigate to the `backend` directory.
+    - Create a `.env` file by copying the example: `cp .env.example .env` (if you have one) or create it manually.
+    - Add your environment variables:
+      ```env
+      MONGODB_URI=your_mongodb_connection_string
+      JWT_SECRET=your_super_secret_jwt_key
+      PORT=5000
+      ```
+
+4.  **Start Both Frontend and Backend:**
+    From the root directory, run:
+    ```bash
+    pnpm run dev
+    ```
+    - The backend API will be available at `http://localhost:5000`
+    - The frontend will be available at `http://localhost:3002` (or as specified by Vite).
+
+## 📸 Screenshots
+
+```
+Tushikane/
+└── screenshots/
+    ├── home/              # Homepage screenshots
+    ├── projectpulse/      # Project Pulse screenshots
+    ├── volunteers/        # Volunteers page screenshots
+    ├── donors/           # Donors page screenshots
+    ├── chathub/          # Chat Hub screenshots
+    ├── admin/            # Admin Dashboard screenshots
+    └── contact/          # Contact page screenshots
+```
 
 ### 🏠 Home
 - Landing page with key features
@@ -71,164 +265,6 @@ A modern, full-stack web application that connects volunteers, donors, and commu
 
 ![Contact](./screenshots/contact/contacts.png)
 
-## 📁 Project Structure
-
-```
-Tushikane/
-├── backend/                 # Express.js API Server
-│   ├── config/             # Database configuration
-│   ├── controllers/        # Route controllers
-│   ├── middleware/         # Custom middleware
-│   ├── models/            # MongoDB schemas
-│   ├── routes/            # API routes
-│   ├── utils/             # Utility functions
-│   ├── server.js          # Main server file
-│   └── package.json       # Backend dependencies
-│
-└── frontend/              # React.js Frontend
-    ├── public/
-    ├── src/
-    │   ├── components/     # Reusable React components
-    │   ├── pages/          # Page components
-    │   ├── styles/         # Global styles
-    │   ├── services/       # API services
-    │   └── assets/         # Images and media
-    ├── package.json
-    └── README.md
-```
-
-## 📸 Screenshots
-
-```
-Tushikane/
-└── screenshots/
-    ├── home/              # Homepage screenshots
-    ├── projectpulse/      # Project Pulse screenshots
-    ├── volunteers/        # Volunteers page screenshots
-    ├── donors/           # Donors page screenshots
-    ├── chathub/          # Chat Hub screenshots
-    ├── admin/            # Admin Dashboard screenshots
-    └── contact/          # Contact page screenshots
-```
-
-## 🚀 Quick Start
-
-### Prerequisites
-- Node.js (v18 or higher)
-- MongoDB (v6.0 or higher)
-- npm or pnpm (recommended)
-
-### Installation
-
-1. Clone the repository:
-```bash
-git clone https://github.com/yourusername/tushikane.git
-```
-
-2. Install backend dependencies:
-```bash
-cd tushikane/backend
-pnpm install
-```
-
-3. Install frontend dependencies:
-```bash
-cd ../frontend
-pnpm install
-```
-
-4. Start the backend server:
-```bash
-# Navigate to backend directory
-cd backend
-
-# Install dependencies
-npm install
-
-# Create environment file
-cp env.example .env
-
-# Edit .env with your configuration
-# MONGODB_URI=mongodb://localhost:27017/tushikane_db
-# JWT_SECRET=your-super-secret-jwt-key
-
-# Start development server
-npm run dev
-```
-
-The backend API will be available at `http://localhost:5001`
-
-### Frontend Setup
-
-```bash
-# Navigate to frontend directory
-cd frontend
-
-# Install dependencies
-pnpm install
-
-# Start development server
-pnpm dev
-```
-
-The frontend will be available at `http://localhost:3002`
-
-## 🔗 API Endpoints
-
-### Authentication
-- `POST /api/auth/register` - Register new user
-- `POST /api/auth/login` - User login
-- `GET /api/auth/me` - Get current user
-- `PUT /api/auth/profile` - Update profile
-
-### Help Requests
-- `GET /api/help-requests` - Get all help requests
-- `POST /api/help-requests` - Create help request
-- `GET /api/help-requests/:id` - Get single request
-- `PUT /api/help-requests/:id` - Update request
-- `DELETE /api/help-requests/:id` - Delete request
-- `POST /api/help-requests/:id/volunteer` - Volunteer for request
-
-### Users
-- `GET /api/users/volunteers` - Get volunteers
-- `GET /api/users/:id` - Get user profile
-
-## 🎯 Features
-
-### Backend Features
-- ✅ JWT Authentication & Authorization
-- ✅ Role-based access control (Volunteer/Requester)
-- ✅ Help request management with filtering
-- ✅ Volunteer system with offer/accept workflow
-- ✅ MongoDB with Mongoose ODM
-- ✅ Input validation and error handling
-- ✅ Rate limiting and security headers
-- ✅ Comprehensive API documentation
-
-### Frontend Features (Coming Soon)
-- 🔄 User authentication and registration
-- 🔄 Help request creation and management
-- 🔄 Volunteer discovery and connection
-- 🔄 Real-time notifications
-- 🔄 Responsive design for mobile/desktop
-
-## 🛠️ Technology Stack
-
-### Backend
-- **Runtime**: Node.js
-- **Framework**: Express.js
-- **Database**: MongoDB with Mongoose
-- **Authentication**: JWT with bcrypt
-- **Security**: Helmet, CORS, Rate Limiting
-- **Validation**: Express-validator
-
-### Frontend (Planned)
-- **Framework**: React.js
-- **State Management**: Redux Toolkit
-- **UI Library**: Material-UI or Tailwind CSS
-- **HTTP Client**: Axios
-- **Routing**: React Router
-
 ## 🔐 User Roles
 
 ### Requester
@@ -277,18 +313,6 @@ The frontend will be available at `http://localhost:3002`
 }
 ```
 
-## 🚀 Deployment
-
-### Backend Deployment
-- **Platform**: Heroku, DigitalOcean, AWS
-- **Database**: MongoDB Atlas
-- **Environment**: Set production variables
-
-### Frontend Deployment
-- **Platform**: Vercel, Netlify, GitHub Pages
-- **Build**: Optimized production build
-- **Environment**: Configure API endpoints
-
 ## 🤝 Contributing
 
 1. Fork the repository
@@ -299,17 +323,11 @@ The frontend will be available at `http://localhost:3002`
 
 ## 📝 License
 
-This project is licensed under the MIT License.
+- This project was part of a PLP Final project under instructor Dedan Okware.
 
 ## 👤 Maker
 
 **Daniel Chege Njenga** - Creator and Developer
-
-## 🙏 Acknowledgments
-
-- **Msaada kwa Jamii** - "Help for the Community"
-- Built with modern web technologies
-- Designed for humanitarian impact
 
 ---
 
