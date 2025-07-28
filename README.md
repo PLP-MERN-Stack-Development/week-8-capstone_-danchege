@@ -9,7 +9,6 @@ A modern, full-stack web application that connects volunteers, donors, and commu
 - **Frontend (Vercel):** http://tushikane.vercel.app/
 - **Backend (Render):** https://tushikane-1.onrender.com/
 - **Pitch Deck:** [View Pitch Deck](https://gamma.app/docs/Tushikane-Humanitarian-Community-Service-Platform-ibcpl4gpqyjsdy6)
-- **Github Link** https://github.com/danchege/Tushikane.git
 
 ## 📁 Project Structure
 
@@ -74,6 +73,26 @@ Tushikane/
 ├── README.md
 └── vercel.json
 ```
+
+## 🌟 Project's Best Feature
+
+### ChatHub (Real-Time Community Chat)
+
+![ChatHub Demo](screenshots/chathub/chathub-demo.png)
+
+**ChatHub** is the heart of Tushikane's real-time community engagement. It allows users to:
+- Join the chat instantly by entering a username (no registration required).
+- See a list of active users in the sidebar.
+- Send and receive messages in real time, powered by WebSockets.
+- Enjoy a modern, mobile-responsive UI with smooth gradients and clear message bubbles.
+
+**How it works:**
+- When a user joins, they pick a username and are added to the active users list.
+- Messages are sent and received instantly for all connected users.
+- All chat messages are stored in MongoDB, so users can see recent chat history when they join.
+- The interface adapts beautifully to mobile and desktop screens, ensuring a seamless experience everywhere.
+
+---
 
 ## 🚀 Deployment
 

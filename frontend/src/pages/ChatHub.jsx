@@ -1,38 +1,35 @@
 import React, { useState, useEffect } from 'react';
-import '@/styles/ChatHub.css';
-import { socket, getMessages } from '../services/api';
+import { Link } from 'react-router-dom';
+import { socket } from '../services/WebSocketService';
+import { getMessages } from '../services/api';
+import '../styles/ChatHub.css';
 
+// Full ChatHub with real-time messaging and modern UI
 const ChatHub = () => {
+  const [username, setUsername] = useState('');
+  const [showUsernameModal, setShowUsernameModal] = useState(true);
+  const [tempUsername, setTempUsername] = useState('');
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
-  const [username, setUsername] = useState('');
   const [users, setUsers] = useState([]);
   const [isConnected, setIsConnected] = useState(false);
-  const [connectionError, setConnectionError] = useState('');
-
-  const handleCopy = (text) => {
-    navigator.clipboard.writeText(text);
-  };
-
-  const handleReply = (text) => {
-    setNewMessage(`> ${text}\n\n${newMessage}`);
-  };
-
-  const handleEmoji = () => {
-    setShowEmojiPicker(!showEmojiPicker);
-  };
-
-  const handleFile = () => {
-    // TODO: Implement file upload
-  };
-  const [activeChat, setActiveChat] = useState(null);
-  const [chats, setChats] = useState([]);
+  const messageInputRef = React.useRef(null);
 
   useEffect(() => {
+    if (!username) return;
+
+    // Fetch chat history on join
+    getMessages().then(res => {
+      if (res && res.data && Array.isArray(res.data.messages)) {
+        setMessages(res.data.messages);
+      }
+    }).catch(err => {
+      console.error('Failed to fetch chat history:', err);
+    });
+
     // Handle connection status
     socket.on('connect', () => {
       setIsConnected(true);
-      setConnectionError('');
       if (username) {
         socket.emit('joinChat', username);
       }
@@ -40,12 +37,6 @@ const ChatHub = () => {
 
     socket.on('disconnect', () => {
       setIsConnected(false);
-      setConnectionError('Connection lost. Attempting to reconnect...');
-    });
-
-    socket.on('connect_error', (error) => {
-      setConnectionError('Failed to connect. Please check if the server is running.');
-      console.error('Connection error:', error);
     });
 
     // Listen for new messages
@@ -64,23 +55,21 @@ const ChatHub = () => {
     });
 
     return () => {
-      // Clean up socket listeners
       socket.off('newMessage');
       socket.off('userJoined');
       socket.off('userLeft');
       socket.off('connect');
       socket.off('disconnect');
-      socket.off('connect_error');
     };
   }, [username]);
 
-  const fetchChats = async () => {
-    try {
-      const response = await getMessages();
-      setChats(response.data.chats);
-      setMessages(response.data.messages);
-    } catch (error) {
-      console.error('Error fetching chats:', error);
+  const handleUsernameSubmit = (e) => {
+    e.preventDefault();
+    if (tempUsername.trim()) {
+      setUsername(tempUsername.trim());
+      setShowUsernameModal(false);
+      // Connect to socket after username is set
+      socket.connect();
     }
   };
 
@@ -94,64 +83,77 @@ const ChatHub = () => {
 
   const handleTyping = (e) => {
     setNewMessage(e.target.value);
-    setIsTyping(true);
   };
 
   return (
     <div className="chat-hub-container">
-      {!isConnected && (
-        <div className="connection-error">
-          <h3>{connectionError}</h3>
-          <button onClick={() => socket.connect()}>
-            Try to Connect
-          </button>
+      {showUsernameModal && (
+        <div className="username-modal-overlay">
+          <div className="username-modal">
+            <h2>Enter your chat username</h2>
+            <form onSubmit={handleUsernameSubmit}>
+              <input
+                type="text"
+                value={tempUsername}
+                onChange={e => setTempUsername(e.target.value)}
+                placeholder="Your name..."
+                autoFocus
+              />
+              <button type="submit">Join Chat</button>
+            </form>
+          </div>
         </div>
       )}
-      {isConnected && (
+      {!showUsernameModal && (
         <>
+          {/* Chat Sidebar */}
           <div className="chat-sidebar">
             <div className="chat-header">
               <h2>Chat Hub</h2>
               <p>Real-time Community Chat</p>
             </div>
-            <div className="user-list">
-              <h3>Active Users</h3>
-              {users.map((user) => (
-                <div key={user} className="user-item">
-                  <span>{user}</span>
-                </div>
-              ))}
-            </div>
           </div>
-
+          {/* Chat Main Area */}
           <div className="chat-main">
+            {/* Messages Area */}
             <div className="message-list">
-              {messages.map((message, index) => (
-                <div
-                  key={index}
-                  className={`message ${message.user === username ? 'user' : ''}`}
-                >
-                  <div className="message-bubble">
-                    <p>{message.content}</p>
-                    <div className="message-meta">
-                      <span>{new Date(message.timestamp).toLocaleTimeString()}</span>
+              {messages.map((message, index) => {
+                const isUser = message.user === username;
+                return (
+                  <div
+                    key={index}
+                    className={`message${isUser ? ' user' : ' other'}`}
+                  >
+                    <div className="message-bubble">
+                      <div className="message-header">
+                        <span className={`message-username${isUser ? ' self' : ''}`}>{message.user}</span>
+                        <span className="message-timestamp">{new Date(message.timestamp).toLocaleTimeString()}</span>
+                      </div>
+                      <p className="message-content">
+                        {message.content}
+                      </p>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
+            {/* Message Input */}
             <div className="message-actions">
-              <form onSubmit={handleSendMessage}>
+              <form onSubmit={handleSendMessage} style={{ display: 'flex', width: '100%', gap: '0.75rem', alignItems: 'center' }}>
                 <input
                   type="text"
                   value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
+                  onChange={handleTyping}
                   placeholder="Type a message..."
+                  ref={messageInputRef}
                   className="message-input"
-                  disabled={!isConnected}
                 />
-                <button type="submit" className="send-button" disabled={!isConnected}>
-                  {isConnected ? 'Send' : 'Connecting...'}
+                <button
+                  type="submit"
+                  disabled={!username || !newMessage.trim()}
+                  className="send-button"
+                >
+                  Send
                 </button>
               </form>
             </div>
