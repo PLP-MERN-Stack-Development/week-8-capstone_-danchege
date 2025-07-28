@@ -80,7 +80,7 @@ Tushikane/
 
 ### ChatHub (Real-Time Community Chat)
 
-![ChatHub Demo](screenshots/chathub/chathub-demo.png)
+![ChatHub Demo](screenshots/chat/chat.png)
 
 **ChatHub** is the heart of Tushikane's real-time community engagement. It allows users to:
 - Join the chat instantly by entering a username (no registration required).
