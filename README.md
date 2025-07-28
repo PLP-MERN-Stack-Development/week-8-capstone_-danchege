@@ -9,6 +9,7 @@ A modern, full-stack web application that connects volunteers, donors, and commu
 - **Frontend (Vercel):** http://tushikane.vercel.app/
 - **Backend (Render):** https://tushikane-1.onrender.com/
 - **Pitch Deck:** [View Pitch Deck](https://gamma.app/docs/Tushikane-Humanitarian-Community-Service-Platform-ibcpl4gpqyjsdy6)
+-**Github Link:** https://github.com/danchege/Tushikane.git
 
 ## 📁 Project Structure
 
